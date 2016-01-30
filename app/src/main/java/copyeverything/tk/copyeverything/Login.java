@@ -3,6 +3,7 @@ package copyeverything.tk.copyeverything;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -83,6 +84,8 @@ public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        Intent test = new Intent(this, IncomingDataListener.class);
+        this.startService(test);
     }
 
     private void populateAutoComplete() {
