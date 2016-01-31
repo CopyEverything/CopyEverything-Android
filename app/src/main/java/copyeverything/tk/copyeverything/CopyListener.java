@@ -50,7 +50,6 @@ public class CopyListener extends Service {
                 Log.w("Test", cd.getItemAt(0).toString());
                 Map<String,Object> Paste = new HashMap<String, Object>();
                 Paste.put("content", cd.getItemAt(0).getText().toString());
-
                 Paste.put("timestamp", new Date().getTime());
                 FireBaseData.fire.child("" + (IncomingDataListener.idNumber + 1)).updateChildren(Paste);
                 IncomingDataListener.idNumber = IncomingDataListener.idNumber + 1;

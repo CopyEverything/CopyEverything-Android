@@ -36,20 +36,20 @@ public class IncomingDataListener extends IntentService {
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
                 Log.w("Test", snapshot.toString());
 
-                if(idNumber == 0){
-                        idNumber = (int) snapshot.getChildrenCount();
-                }
-                int count;
+                int count = 0;
                 try {
-                    count = (int) snapshot.getChildrenCount();
+                    count = Integer.getInteger(previousChildKey,0);
+
                 }catch (NullPointerException e){
                     count = 0;
                 }
+
                 if(idNumber < count) {
                     Paste p = snapshot.child("" + count).getValue(Paste.class);
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("simple text", p.getContent());
+                    ClipData clip = ClipData.newPlainText("simple text", p.getContent().replace("/n"," "));
                     clipboard.setPrimaryClip(clip);
+                    idNumber = count;
                     Log.w("Test", p.getContent());
                 }
 
