@@ -78,6 +78,10 @@ public class AuthenticationActivity extends AppCompatActivity {
         user.setInfo(token, uid);
         Firebase.setAndroidContext(this);
         FireBaseData.authUser();
+        Intent test = new Intent(this, IncomingDataListener.class);
+        this.startService(test);
+        Intent nextTest = new Intent(this, CopyListener.class);
+        this.startService(nextTest);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

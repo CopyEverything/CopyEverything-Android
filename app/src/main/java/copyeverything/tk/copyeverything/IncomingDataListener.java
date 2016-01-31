@@ -22,7 +22,7 @@ import com.firebase.client.ValueEventListener;
  */
 public class IncomingDataListener extends IntentService {
 
-    public static int idNumber;
+    public static int idNumber = 0;
 
     public IncomingDataListener(){
         super("IncomingDataListener");
@@ -34,12 +34,25 @@ public class IncomingDataListener extends IntentService {
 
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
-                Paste p = snapshot.getValue(Paste.class);
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("simple text", p.getContent());
-                clipboard.setPrimaryClip(clip);
+                Log.w("Test", snapshot.toString());
 
-                Log.w("Test", p.getContent());
+                if(idNumber == 0){
+                        idNumber = (int) snapshot.getChildrenCount();
+                }
+                int count;
+                try {
+                    count = (int) snapshot.getChildrenCount();
+                }catch (NullPointerException e){
+                    count = 0;
+                }
+                if(idNumber < count) {
+                    Paste p = snapshot.child("" + count).getValue(Paste.class);
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("simple text", p.getContent());
+                    clipboard.setPrimaryClip(clip);
+                    Log.w("Test", p.getContent());
+                }
+
             }
 
             @Override

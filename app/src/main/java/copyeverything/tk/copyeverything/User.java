@@ -17,6 +17,12 @@ public class User {
     public static void setInfo(String token, String uid){
         Token = token;
         Uid = uid;
+
+    }
+
+    public static void setInfo(AuthData authData){
+        Token = authData.getToken();
+        Uid = authData.getUid();
     }
 
     public static String getUid(){

@@ -51,16 +51,10 @@ public class CopyListener extends Service {
                 Map<String,Object> Paste = new HashMap<String, Object>();
                 Paste.put("content", cd.getItemAt(0).getText().toString());
 
-                final Date currentTime = new Date();
-                final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
-                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-                Paste.put("timestamp", sdf.format(currentTime));
-                FireBaseData.fire.child("" + IncomingDataListener.idNumber + 1).updateChildren(Paste);
+                Paste.put("timestamp", new Date().getTime());
+                FireBaseData.fire.child("" + (IncomingDataListener.idNumber + 1)).updateChildren(Paste);
                 IncomingDataListener.idNumber = IncomingDataListener.idNumber + 1;
             }
-
-
         }
     }
 
