@@ -32,10 +32,16 @@
                 <action android:name="copyeverything.tk.copyeverything"/>
             </intent-filter>
         </service>
+        <service android:name=".CopyListener" android:label="Copy Listener"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="copyeverything.tk.copyeverything"/>
+            </intent-filter>
+        </service>
         <receiver android:name=".StartListeners"
             android:label="StartListeners">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 

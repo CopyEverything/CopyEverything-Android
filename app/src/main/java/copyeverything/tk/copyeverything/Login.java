@@ -86,6 +86,8 @@ public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> 
         mProgressView = findViewById(R.id.login_progress);
         Intent test = new Intent(this, IncomingDataListener.class);
         this.startService(test);
+        Intent nextTest = new Intent(this, CopyListener.class);
+        this.startService(nextTest);
     }
 
     private void populateAutoComplete() {

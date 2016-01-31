@@ -11,8 +11,10 @@ public class StartListeners extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent){
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())){
-            Intent serviceIntent = new Intent(context, IncomingDataListener.class);
-            context.startService(serviceIntent);
+            Intent incomingServiceIntent = new Intent(context, IncomingDataListener.class);
+            context.startService(incomingServiceIntent);
+            Intent copyServiceIntent = new Intent(context, CopyListener.class);
+            context.startService(copyServiceIntent);
         }
     }
 }

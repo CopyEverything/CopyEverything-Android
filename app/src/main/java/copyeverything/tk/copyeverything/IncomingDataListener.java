@@ -20,30 +20,44 @@ import com.firebase.client.ValueEventListener;
  */
 public class IncomingDataListener extends IntentService {
 
+    private Firebase fire;
+    public static boolean isComingDown = false;
+
     public IncomingDataListener(){
         super("IncomingDataListener");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Firebase.setAndroidContext(this);
-        Firebase ref = new Firebase("https://vivid-inferno-6279.firebaseio.com/");
 
-        ref.addValueEventListener(new ValueEventListener() {
+        Firebase.setAndroidContext(this);
+        Firebase fire = new Firebase("https://vivid-inferno-6279.firebaseio.com/");
+
+        fire.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Log.w("Test", snapshot.getValue().toString());
-                ClipboardManager clipboard = (ClipboardManager)
-                        getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("simple text", snapshot.getValue().toString());
-                clipboard.setPrimaryClip(clip);
+                if(CopyListener.currentContents.equalsIgnoreCase(snapshot.getValue().toString())) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("simple text", snapshot.getValue().toString());
+                    clipboard.setPrimaryClip(clip);
+                }
 
             }
+
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.w("Test", "Disconnected");;
+                Log.w("Test", "Disconnected");
+
             }
         });
 
+
+
     }
+
+
+
+
+
 }
