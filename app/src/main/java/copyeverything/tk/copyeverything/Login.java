@@ -31,10 +31,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,7 +147,7 @@ public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> 
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            Intent intent = new Intent(getApplicationContext(), AuthenticationActivity.class);
+            Intent intent = new Intent(this, AuthenticationActivity.class);
             intent.putExtra("email", email);
             intent.putExtra("password", password);
             startActivity(intent);

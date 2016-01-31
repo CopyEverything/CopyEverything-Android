@@ -21,6 +21,7 @@ import com.firebase.client.FirebaseError;
 /**
  * Created by Nathan on 2016-01-30.
  */
+
 public class AuthenticationActivity extends Activity {
 
     public User user = new User();
