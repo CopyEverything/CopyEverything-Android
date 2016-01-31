@@ -1,6 +1,9 @@
 package copyeverything.tk.copyeverything;
 
 import android.app.IntentService;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -30,6 +33,10 @@ public class IncomingDataListener extends IntentService {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Log.w("Test", snapshot.getValue().toString());
+                ClipboardManager clipboard = (ClipboardManager)
+                        getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("simple text", snapshot.getValue().toString());
+                clipboard.setPrimaryClip(clip);
 
             }
             @Override
