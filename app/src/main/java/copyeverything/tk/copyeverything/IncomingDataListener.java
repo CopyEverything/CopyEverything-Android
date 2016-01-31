@@ -15,6 +15,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 /**
@@ -22,7 +23,7 @@ import com.firebase.client.ValueEventListener;
  */
 public class IncomingDataListener extends IntentService {
 
-    public static int idNumber = 0;
+    public static String lastRecievedString = "";
 
     public IncomingDataListener(){
         super("IncomingDataListener");
@@ -30,28 +31,24 @@ public class IncomingDataListener extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        FireBaseData.fire.addChildEventListener(new ChildEventListener() {
+        Query queryRef = FireBaseData.fire.orderByChild("timestamp").limitToLast(1);
+
+        queryRef.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
-                Log.w("Test", snapshot.toString());
+                String a = snapshot.getChildren().iterator().next().getValue().toString();
 
-                int count = 0;
-                try {
-                    count = Integer.getInteger(previousChildKey,0);
-
-                }catch (NullPointerException e){
-                    count = 0;
-                }
-
-                if(idNumber < count) {
-                    Paste p = snapshot.child("" + count).getValue(Paste.class);
+                //Paste p = a.getValue(Paste.class);
+                    if(lastRecievedString.equalsIgnoreCase(a)){
+                        return;
+                    }
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("simple text", p.getContent().replace("/n"," "));
+                    ClipData clip = ClipData.newPlainText("simple text", a);
                     clipboard.setPrimaryClip(clip);
-                    idNumber = count;
-                    Log.w("Test", p.getContent());
-                }
+                    lastRecievedString = a;
+                    //Log.w("Test", p.getContent());
+
 
             }
 
@@ -76,12 +73,5 @@ public class IncomingDataListener extends IntentService {
 
             }
         });
-
-
     }
-
-
-
-
-
 }

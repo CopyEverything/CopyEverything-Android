@@ -146,7 +146,6 @@ public class AuthenticationActivity extends AppCompatActivity {
             }
             Log.i("INFO", response);
             handleTokenRequest(response);
-            Toast.makeText(AuthenticationActivity.this, response, Toast.LENGTH_LONG).show();
         }
 
         @Override
