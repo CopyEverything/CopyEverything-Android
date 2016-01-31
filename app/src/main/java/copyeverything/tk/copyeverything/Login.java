@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,7 +41,7 @@ import java.util.Map;
 /**
  * A login screen that offers login via email/password.
  */
-public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -90,7 +91,7 @@ public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> 
         //this.startService(nextTest);
 
         mEmailView.setText("test@test.com");
-        mPasswordView.setText("test");
+        mPasswordView.setText("12345678");
     }
 
     private void populateAutoComplete() {

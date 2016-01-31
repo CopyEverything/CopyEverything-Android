@@ -15,9 +15,15 @@ public class User {
     private static String Token;
     public static boolean loggedIn = false;
 
+    public static void setInfo(String token, String uid){
+        Token = token;
+        Uid = uid;
+        loggedIn = true;
+    }
+
     public static void setInfo(AuthData authData){
-        Uid = authData.getUid();
         Token = authData.getToken();
+        Uid = authData.getUid();
         loggedIn = true;
     }
 }
