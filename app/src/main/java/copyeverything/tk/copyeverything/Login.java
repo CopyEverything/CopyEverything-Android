@@ -66,7 +66,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         h.post(new Runnable() {
             @Override
             public void run() {
-                getActionBar().hide();
+                getSupportActionBar().hide();
             }
         });
 
@@ -103,8 +103,6 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         //Intent nextTest = new Intent(this, CopyListener.class);
         //this.startService(nextTest);
 
-        mEmailView.setText("test@test.com");
-        mPasswordView.setText("12345678");
     }
 
     private void populateAutoComplete() {

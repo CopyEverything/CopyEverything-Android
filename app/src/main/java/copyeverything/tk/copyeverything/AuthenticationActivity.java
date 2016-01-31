@@ -69,6 +69,11 @@ public class AuthenticationActivity extends AppCompatActivity {
                 uid = obj.getString(1);
                 token = obj.getString(2);
             }
+            else{
+                Intent back = new Intent(getApplicationContext(), Login.class);
+                startActivity(back);
+                return;
+            }
         }
         catch (JSONException e) {
             Log.e("ERROR", e.getMessage());
