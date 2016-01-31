@@ -13,8 +13,11 @@ import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 /**
@@ -47,6 +50,12 @@ public class CopyListener extends Service {
                 Log.w("Test", cd.getItemAt(0).toString());
                 Map<String,Object> Paste = new HashMap<String, Object>();
                 Paste.put("content", cd.getItemAt(0).getText().toString());
+
+                final Date currentTime = new Date();
+                final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                Paste.put("timestamp", sdf.format(currentTime));
                 FireBaseData.fire.child("" + IncomingDataListener.idNumber + 1).updateChildren(Paste);
                 IncomingDataListener.idNumber = IncomingDataListener.idNumber + 1;
             }

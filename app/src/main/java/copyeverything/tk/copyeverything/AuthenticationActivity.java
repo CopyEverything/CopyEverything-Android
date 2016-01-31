@@ -53,7 +53,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         token = new RetrieveUserToken(mEmail, mPassword);
         token.execute();
 
-        authenticate(mEmail, mPassword);
+        //authenticate(mEmail, mPassword);
     }
 
     private void handleTokenRequest(String response) {
@@ -76,37 +76,13 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
 
         user.setInfo(token, uid);
+        Firebase.setAndroidContext(this);
+        FireBaseData.authUser();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 
-    private void authenticate(String mEmail, String mPassword) {
-        Firebase.setAndroidContext(getApplicationContext());
-        Firebase ref = new Firebase("https://vivid-inferno-6279.firebaseio.com/");
-        ref.authWithPassword(mEmail, mPassword,
-                new Firebase.AuthResultHandler() {
-                    @Override
-                    public void onAuthenticated(AuthData authData) {
-                        // Authentication just completed successfully :)
-                        user.setInfo(authData);
-                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("Token", authData.getToken());
-                        editor.putString("UID", authData.getUid());
-                        editor.commit();
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onAuthenticationError(FirebaseError error) {
-                        Toast.makeText(getApplicationContext(), "Denied", Toast.LENGTH_SHORT);
-
-                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                        startActivity(intent);
-                    }
-                }
-        );
-    }
 
     class RetrieveUserToken extends AsyncTask<Void, Void, String> {
 

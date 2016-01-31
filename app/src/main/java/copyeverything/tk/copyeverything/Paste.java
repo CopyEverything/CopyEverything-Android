@@ -6,6 +6,7 @@ package copyeverything.tk.copyeverything;
 public class Paste {
 
         public String content;
+        public int timeStamp;
 
         Paste(){
 
@@ -15,8 +16,10 @@ public class Paste {
         return content;
     }
 
-
+    public int getTimestamp(){
+        return timeStamp;
     }
+}
 
 
 

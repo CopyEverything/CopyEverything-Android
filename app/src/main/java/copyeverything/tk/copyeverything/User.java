@@ -13,17 +13,16 @@ public class User {
 
     private static String Uid;
     private static String Token;
-    public static boolean loggedIn = false;
 
     public static void setInfo(String token, String uid){
         Token = token;
         Uid = uid;
-        loggedIn = true;
     }
 
-    public static void setInfo(AuthData authData){
-        Token = authData.getToken();
-        Uid = authData.getUid();
-        loggedIn = true;
+    public static String getUid(){
+        return Uid;
+    }
+    public static String getToken(){
+        return Token;
     }
 }

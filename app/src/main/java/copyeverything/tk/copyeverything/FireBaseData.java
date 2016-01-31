@@ -15,8 +15,8 @@ public class FireBaseData {
         isAuth = false;
     }
 
-    public void authUser(){
-        this.fire = new Firebase("https://vivid-inferno-6279.firebaseio.com/copies/"+User.getUid());
+    public static void authUser(){
+        fire = new Firebase("https://vivid-inferno-6279.firebaseio.com/copies/"+User.getUid());
         fire.authWithCustomToken(User.getToken(),
                 new Firebase.AuthResultHandler() {
                     @Override
