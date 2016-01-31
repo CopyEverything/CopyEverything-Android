@@ -58,6 +58,7 @@ public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -125,7 +126,10 @@ public class Login extends ActionBarActivity implements LoaderCallbacks<Cursor> 
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            //If empty go to register page
+            Uri registerPageUri = Uri.parse("http://copyeverything.tk");
+            Intent redirectIntent = new Intent(Intent.ACTION_VIEW, registerPageUri);
+            startActivity(redirectIntent);
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
