@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -20,8 +22,7 @@ import com.firebase.client.ValueEventListener;
  */
 public class IncomingDataListener extends IntentService {
 
-    private Firebase fire;
-    public static boolean isComingDown = false;
+    public static int idNumber;
 
     public IncomingDataListener(){
         super("IncomingDataListener");
@@ -29,19 +30,30 @@ public class IncomingDataListener extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        FireBaseData.fire.addChildEventListener(new ChildEventListener() {
 
-        Firebase.setAndroidContext(this);
-        Firebase fire = new Firebase("https://vivid-inferno-6279.firebaseio.com/");
-
-        fire.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Log.w("Test", snapshot.getValue().toString());
-                if(CopyListener.currentContents.equalsIgnoreCase(snapshot.getValue().toString())) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("simple text", snapshot.getValue().toString());
-                    clipboard.setPrimaryClip(clip);
-                }
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
+                Paste p = snapshot.getValue(Paste.class);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("simple text", p.getContent());
+                clipboard.setPrimaryClip(clip);
+
+                Log.w("Test", p.getContent());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
 
@@ -51,7 +63,6 @@ public class IncomingDataListener extends IntentService {
 
             }
         });
-
 
 
     }

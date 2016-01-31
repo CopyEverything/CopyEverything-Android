@@ -9,7 +9,12 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -19,31 +24,31 @@ import com.firebase.client.Firebase;
 
 public class CopyListener extends Service {
 
-    public static String currentContents = "";
-    private Firebase fire;
 
 
     public void startCopyListener() {
-        Log.w("Test", "Something Started");
-        Firebase.setAndroidContext(this);
-        fire = new Firebase("https://vivid-inferno-6279.firebaseio.com/");
         ClipboardManager.OnPrimaryClipChangedListener listener = new ClipboardManager.OnPrimaryClipChangedListener() {
             public void onPrimaryClipChanged() {
-                addToClipboard();
+                pushToFireBaseClipboard();
             }
         };
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
-    private void addToClipboard() {
 
+
+
+
+    private void pushToFireBaseClipboard() {
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (cb.hasPrimaryClip() && IncomingDataListener.isComingDown != true) {
+        if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if(cd != null){
-                currentContents = cd.getItemAt(0).toString();
                 Log.w("Test", cd.getItemAt(0).toString());
-                fire.child("test").setValue(cd.getItemAt(0));
+                Map<String,Object> Paste = new HashMap<String, Object>();
+                Paste.put("content", cd.getItemAt(0).getText().toString());
+                FireBaseData.fire.child("" + IncomingDataListener.idNumber + 1).updateChildren(Paste);
+                IncomingDataListener.idNumber = IncomingDataListener.idNumber + 1;
             }
 
 
@@ -53,7 +58,6 @@ public class CopyListener extends Service {
 
 
     public void onCreate(){
-        Log.w("Test", "Something First");
         startCopyListener();
     }
 
