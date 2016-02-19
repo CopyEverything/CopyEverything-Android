@@ -1,5 +1,6 @@
 package copyeverything.tk.copyeverything;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Nathan on 2016-01-30.
@@ -22,7 +24,7 @@ import org.json.JSONException;
 public class AuthenticationActivity extends AppCompatActivity {
 
     public User user = new User();
-    private RetrieveUserToken token;
+    //private RetrieveUserToken token;
     Socket mSocket;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,58 @@ public class AuthenticationActivity extends AppCompatActivity {
         mSocket = database.getSocket();
         mSocket.connect();
 
-        token = new RetrieveUserToken(mEmail, mPassword);
-        token.execute();
+        //Listen for authentication response
+        mSocket.on("auth resp", handleAuthentication);
+
+        attemptLogin(mEmail, mPassword);
+        //token = new RetrieveUserToken(mEmail, mPassword);
+        //token.execute();
 
         //authenticate(mEmail, mPassword);
     }
+
+    private void attemptLogin(String username, String password) {
+        try {
+            //Put email and password to JSON
+            JSONObject authdata = new JSONObject();
+            authdata.put("username", username);
+            authdata.put("password", password);
+
+            //Send authentication data
+            mSocket.emit("auth", authdata);
+        }
+        catch (Exception e) {
+            Log.e("error",e.getMessage(),e);
+        }
+    }
+
+    private Emitter.Listener handleAuthentication = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+
+            try {
+                //Perform your action - like adding the message to your adapter and showing it in your chat list
+                Log.d("response", args[0].toString());
+
+                JSONArray response = (JSONArray) args[0];
+
+                if(response.getBoolean(0)) {
+                    //Go to MainActivity
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+                else {
+                    Intent back = new Intent(getApplicationContext(), Login.class);
+                    startActivity(back);
+                    return;
+                }
+            }
+            catch (Exception e) {
+                Log.d("error", e.getMessage(), e);
+            }
+        }
+    };
 
     private void handleTokenRequest(String response) {
         JSONArray obj = null;
@@ -81,95 +130,6 @@ public class AuthenticationActivity extends AppCompatActivity {
         this.startService(nextTest);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
-    }
-
-
-
-    class RetrieveUserToken extends AsyncTask<Void, Void, String> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        RetrieveUserToken(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try{
-                //Send authentication data
-                mSocket.emit("auth", mEmail, mPassword);
-
-                //Listen for response
-                mSocket.on("auth", handleAuthentication);
-
-                return null;
-            }
-            catch (Exception e) {
-                Log.e("error",e.getMessage(),e);
-                return null;
-            }
-            /*try {
-                URL url = new URL("http://copyeverything.tk/auth.php");
-                String urlParameters = "email=" + URLEncoder.encode(mEmail, "UTF-8") + "&pass=" + URLEncoder.encode(mPassword, "UTF-8");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("User-Agent", "Mozilla 5.0");
-                urlConnection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-                //Write the POST request
-                urlConnection.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
-                wr.writeBytes(urlParameters);
-                wr.flush();
-                wr.close();
-
-                int responseCode = urlConnection.getResponseCode();
-                System.out.println("Response Code : " + responseCode);
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    bufferedReader.close();
-                    Log.d("StringBuilder", stringBuilder.toString());
-                    return stringBuilder.toString();
-                }
-                finally{
-                    urlConnection.disconnect();
-                }
-            }
-            catch(Exception e) {
-                Log.e("ERROR", e.getMessage(), e);
-                return null;
-            }*/
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            if(response == null) {
-                response = "THERE WAS AN ERROR";
-            }
-            Log.i("INFO", response);
-            handleTokenRequest(response);
-        }
-
-        @Override
-        protected void onCancelled() {
-
-        }
-
-        private Emitter.Listener handleAuthentication = new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                Toast.makeText(AuthenticationActivity.this, "Received server response", Toast.LENGTH_SHORT).show();
-                //Perform your action - like adding the message to your adapter and showing it in your chat list
-            }
-        };
     }
 }
 
