@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -50,7 +51,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
      */
     public static User user = new User();
     // UI references.
-    private ImageView mImageView;
+    private TextView mTitleView;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -60,8 +61,8 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
+        //Remove support action bar
         Handler h = new Handler();
         h.post(new Runnable() {
             @Override
@@ -71,11 +72,12 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         });
 
         // Set up the login form.
-        //mImageView = (ImageView) findViewById(R.id.clipIcon);
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mTitleView = (TextView) findViewById(R.id.txtTitle);
+        Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
+        mTitleView.setTypeface(titleFont);
 
-        //mImageView.setImageResource(R.mipmap.ic_launcher);
-        //populateAutoComplete();
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -108,7 +110,6 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
