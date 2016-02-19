@@ -1,29 +1,16 @@
 package copyeverything.tk.copyeverything;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -81,6 +68,9 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
 
         user.setInfo(token, uid);
+        SharedPreferences settings = getSharedPreferences("CopyEverythingTemp", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(uid,token).apply();
         Firebase.setAndroidContext(this);
         FireBaseData.authUser();
         Intent test = new Intent(this, IncomingDataListener.class);
