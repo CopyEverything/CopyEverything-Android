@@ -23,7 +23,7 @@ import com.firebase.client.ValueEventListener;
  */
 public class IncomingDataListener extends IntentService {
 
-    public static String lastRecievedString = "";
+    public static String lastReceivedString = "";
 
     public IncomingDataListener(){
         super("IncomingDataListener");
@@ -39,15 +39,13 @@ public class IncomingDataListener extends IntentService {
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
                 String a = snapshot.getChildren().iterator().next().getValue().toString();
 
-                //Paste p = a.getValue(Paste.class);
-                    if(lastRecievedString.equalsIgnoreCase(a)){
+                    if(lastReceivedString.equalsIgnoreCase(a)){
                         return;
                     }
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("simple text", a);
                     clipboard.setPrimaryClip(clip);
-                    lastRecievedString = a;
-                    //Log.w("Test", p.getContent());
+                    lastReceivedString = a;
 
 
             }

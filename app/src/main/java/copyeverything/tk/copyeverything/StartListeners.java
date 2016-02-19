@@ -8,7 +8,7 @@ import com.firebase.client.*;
 import com.firebase.client.Firebase;
 
 /**
- * Created by Nathan on 2016-01-30.
+ * This is for starting the listeners when the app starts up
  */
 public class StartListeners extends BroadcastReceiver {
 
