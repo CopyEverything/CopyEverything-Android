@@ -6,18 +6,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 /**
  * Created by Nathan on 2016-01-30.
@@ -27,6 +23,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
     public User user = new User();
     private RetrieveUserToken token;
+    Socket mSocket;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +33,11 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         String mEmail = data.getString("email");
         String mPassword = data.getString("password");
+
+        //Connect to socket
+        SocketDataBase database = (SocketDataBase) getApplication();
+        mSocket = database.getSocket();
+        mSocket.connect();
 
         token = new RetrieveUserToken(mEmail, mPassword);
         token.execute();
@@ -95,7 +97,20 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            try {
+            try{
+                //Send authentication data
+                mSocket.emit("auth", mEmail, mPassword);
+
+                //Listen for response
+                mSocket.on("auth", handleAuthentication);
+
+                return null;
+            }
+            catch (Exception e) {
+                Log.e("error",e.getMessage(),e);
+                return null;
+            }
+            /*try {
                 URL url = new URL("http://copyeverything.tk/auth.php");
                 String urlParameters = "email=" + URLEncoder.encode(mEmail, "UTF-8") + "&pass=" + URLEncoder.encode(mPassword, "UTF-8");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -131,7 +146,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             catch(Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
                 return null;
-            }
+            }*/
         }
 
         @Override
@@ -147,6 +162,14 @@ public class AuthenticationActivity extends AppCompatActivity {
         protected void onCancelled() {
 
         }
+
+        private Emitter.Listener handleAuthentication = new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                Toast.makeText(AuthenticationActivity.this, "Received server response", Toast.LENGTH_SHORT).show();
+                //Perform your action - like adding the message to your adapter and showing it in your chat list
+            }
+        };
     }
 }
 

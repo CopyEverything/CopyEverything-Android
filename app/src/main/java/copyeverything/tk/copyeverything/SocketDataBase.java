@@ -11,12 +11,12 @@ import java.net.URISyntaxException;
 /**
  * Created by Nathan on 2016-02-19.
  */
-public class SocketDatabase extends Application {
+public class SocketDataBase extends Application {
 
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("copyeverything.tk");
+            mSocket = IO.socket("http://copyeverything.tk:80");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -25,6 +25,5 @@ public class SocketDatabase extends Application {
     public Socket getSocket() {
         return mSocket;
     }
-
 
 }

@@ -14,7 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name="copyeverything.tk.copyeverything.SocketDatabase"
+        android:name=".SocketDataBase"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Login"

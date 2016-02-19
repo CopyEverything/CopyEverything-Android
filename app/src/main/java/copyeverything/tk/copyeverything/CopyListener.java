@@ -47,7 +47,7 @@ public class CopyListener extends Service {
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if(cd != null){
-                if(IncomingDataListener.lastRecievedString.equalsIgnoreCase(cd.getItemAt(0).getText().toString())){
+                if(IncomingDataListener.lastReceivedString.equalsIgnoreCase(cd.getItemAt(0).getText().toString())){
                     return;
                 }
                 Log.w("Test", cd.getItemAt(0).toString());

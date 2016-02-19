@@ -105,6 +105,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         //Intent nextTest = new Intent(this, CopyListener.class);
         //this.startService(nextTest);
 
+        //Debug
+        mEmailView.setText("test@test.com");
+        mPasswordView.setText("testtest");
     }
 
     private void populateAutoComplete() {
