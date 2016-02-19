@@ -71,10 +71,10 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         });
 
         // Set up the login form.
-        mImageView = (ImageView) findViewById(R.id.clipIcon);
+        //mImageView = (ImageView) findViewById(R.id.clipIcon);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
-        mImageView.setImageResource(R.mipmap.ic_launcher);
+        //mImageView.setImageResource(R.mipmap.ic_launcher);
         //populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
