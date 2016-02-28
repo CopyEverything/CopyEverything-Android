@@ -12,6 +12,7 @@ import android.util.Log;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.github.nkzawa.socketio.client.Socket;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,22 +28,18 @@ import java.util.TimeZone;
 
 public class CopyListener extends Service {
 
-
+    private Socket mSocket;
 
     public void startCopyListener() {
         ClipboardManager.OnPrimaryClipChangedListener listener = new ClipboardManager.OnPrimaryClipChangedListener() {
             public void onPrimaryClipChanged() {
-                pushToFireBaseClipboard();
+                pushToDataBase();
             }
         };
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
-
-
-
-
-    private void pushToFireBaseClipboard() {
+    private void pushToDataBase() {
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
@@ -50,19 +47,19 @@ public class CopyListener extends Service {
                 if(IncomingDataListener.lastReceivedString.equalsIgnoreCase(cd.getItemAt(0).getText().toString())){
                     return;
                 }
-                Log.w("Test", cd.getItemAt(0).toString());
-                Map<String,Object> Paste = new HashMap<String, Object>();
-                Paste.put("content", cd.getItemAt(0).getText().toString());
-                Paste.put("timestamp", new Date().getTime());
-
-                FireBaseData.fire.push().setValue(Paste);
+                if(mSocket.connected()){
+                    Log.w("Test", cd.getItemAt(0).toString());
+                    mSocket.emit("new client copy", cd.getItemAt(0).getText().toString());
+                }
             }
         }
     }
 
 
-
+    @Override
     public void onCreate(){
+        SocketDataBase database = (SocketDataBase) getApplication();
+        mSocket = database.getSocket();
         startCopyListener();
     }
 

@@ -1,75 +1,58 @@
 package copyeverything.tk.copyeverything;
 
-import android.app.IntentService;
+import android.app.Application;
+import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.os.Handler;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Nathan on 2016-01-30.
  */
-public class IncomingDataListener extends IntentService {
+public class IncomingDataListener extends Service {
 
     public static String lastReceivedString = "";
-
-    public IncomingDataListener(){
-        super("IncomingDataListener");
-    }
+    private Socket mSocket;
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Query queryRef = FireBaseData.fire.orderByChild("timestamp").limitToLast(1);
-
-        queryRef.addChildEventListener(new ChildEventListener() {
-
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
-                String a = snapshot.getChildren().iterator().next().getValue().toString();
-
-                    if(lastReceivedString.equalsIgnoreCase(a)){
-                        return;
-                    }
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("simple text", a);
-                    clipboard.setPrimaryClip(clip);
-                    lastReceivedString = a;
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.w("Test", "Disconnected");
-
-            }
-        });
+    public void onCreate() {
+        SocketDataBase database = (SocketDataBase) getApplication();
+        mSocket = database.getSocket();
+        mSocket.on("new server copy", getPaste);
     }
+
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    public void onDestroy(){
+
+    }
+    private Emitter.Listener getPaste = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            String a = (String)args[0];
+            if(lastReceivedString.equalsIgnoreCase(a)){
+                return;
+            }
+            Log.w("Got Data", a);
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("simple text", a);
+            clipboard.setPrimaryClip(clip);
+            lastReceivedString = a;
+        }
+    };
 }

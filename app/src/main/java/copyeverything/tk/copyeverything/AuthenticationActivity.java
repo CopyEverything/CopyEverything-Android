@@ -80,6 +80,10 @@ public class AuthenticationActivity extends AppCompatActivity {
                     //Go to MainActivity
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    Intent IncomingDataListener = new Intent(getApplicationContext(), IncomingDataListener.class);
+                    getApplicationContext().startService(IncomingDataListener);
+                    Intent CopyListener = new Intent(getApplicationContext(), CopyListener.class);
+                    getApplicationContext().startService(CopyListener);
                     return;
                 }
                 else {
