@@ -5,17 +5,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Ack;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Nathan on 2016-01-30.
@@ -24,8 +32,21 @@ import org.json.JSONObject;
 public class AuthenticationActivity extends AppCompatActivity {
 
     public User user = new User();
-    //private RetrieveUserToken token;
+    //RetrieveUserToken token;
     Socket mSocket;
+    Boolean isAuth = false;
+    String mEmail;
+    String mPassword;
+
+    TimerTask hTimer = new TimerTask() {
+        @Override
+        public void run() {
+            if(!isAuth) {
+                //Abort Login
+                runLoginIntent("Authentication Timed Out");
+            }
+        }
+    };
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,26 +54,30 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         Bundle data = getIntent().getExtras();
 
-        String mEmail = data.getString("email");
-        String mPassword = data.getString("password");
-
-        //Connect to socket
-        SocketDataBase database = (SocketDataBase) getApplication();
-        mSocket = database.getSocket();
-        mSocket.connect();
-
-        //Listen for authentication response
-        mSocket.on("auth resp", handleAuthentication);
+        mEmail = data.getString("email");
+        mPassword = data.getString("password");
 
         attemptLogin(mEmail, mPassword);
+
+        Timer timer = new Timer();
+        timer.schedule(hTimer, 20000);
+
         //token = new RetrieveUserToken(mEmail, mPassword);
         //token.execute();
 
         //authenticate(mEmail, mPassword);
     }
 
-    private void attemptLogin(String username, String password) {
+    public void attemptLogin(String username, String password) {
         try {
+            //Connect to socket
+            SocketDataBase database = (SocketDataBase) getApplication();
+            mSocket = database.getSocket();
+            mSocket.connect();
+
+            //Listen for authentication response
+            mSocket.on("auth resp", handleAuthentication);
+
             //Put email and password to JSON
             JSONObject authdata = new JSONObject();
             authdata.put("username", username);
@@ -60,9 +85,9 @@ public class AuthenticationActivity extends AppCompatActivity {
 
             //Send authentication data
             mSocket.emit("auth", authdata);
-        }
-        catch (Exception e) {
-            Log.e("error",e.getMessage(),e);
+
+        } catch (Exception e) {
+            Log.e("error", e.getMessage(), e);
         }
     }
 
@@ -77,19 +102,22 @@ public class AuthenticationActivity extends AppCompatActivity {
                 JSONArray response = (JSONArray) args[0];
 
                 if(response.getBoolean(0)) {
+
+                    Context ctx = getApplicationContext();
+                    isAuth = true;
+                    saveCredentials();
+
+                    Intent IncomingDataListener = new Intent(ctx, IncomingDataListener.class);
+                    ctx.startService(IncomingDataListener);
+                    Intent CopyListener = new Intent(ctx, CopyListener.class);
+                    ctx.startService(CopyListener);
+
                     //Go to MainActivity
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(ctx, MainActivity.class);
                     startActivity(intent);
-                    Intent IncomingDataListener = new Intent(getApplicationContext(), IncomingDataListener.class);
-                    getApplicationContext().startService(IncomingDataListener);
-                    Intent CopyListener = new Intent(getApplicationContext(), CopyListener.class);
-                    getApplicationContext().startService(CopyListener);
-                    return;
                 }
                 else {
-                    Intent back = new Intent(getApplicationContext(), Login.class);
-                    startActivity(back);
-                    return;
+                    runLoginIntent("Error: Authentication Failed");
                 }
             }
             catch (Exception e) {
@@ -97,6 +125,22 @@ public class AuthenticationActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void runLoginIntent(String errorMessage) {
+
+        Intent back = new Intent(getApplicationContext(), Login.class);
+        back.putExtra("error", errorMessage);
+        startActivity(back);
+    }
+
+    private void saveCredentials() {
+        //Saves email and password in plain text
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.saved_email), mEmail);
+        editor.putString(getString(R.string.saved_pass), mPassword);
+        editor.commit();
+    }
 
     private void handleTokenRequest(String response) {
         JSONArray obj = null;

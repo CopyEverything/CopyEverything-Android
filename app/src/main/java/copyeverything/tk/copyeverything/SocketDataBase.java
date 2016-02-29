@@ -1,10 +1,14 @@
 package copyeverything.tk.copyeverything;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
@@ -16,7 +20,11 @@ public class SocketDataBase extends Application {
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("http://copyeverything.tk:80");
+            IO.Options options = new IO.Options();
+            options.multiplex = false;
+            options.secure = true;
+
+            mSocket = IO.socket("https://copyeverything.tk", options);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

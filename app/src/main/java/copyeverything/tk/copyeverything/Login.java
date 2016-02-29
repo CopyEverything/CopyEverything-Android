@@ -62,6 +62,14 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Get Error Messages if coming back from authentication screen
+        Bundle data = getIntent().getExtras();
+
+        if(data != null) {
+            String errorMessage = data.getString("error");
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+
         //Remove support action bar
         Handler h = new Handler();
         h.post(new Runnable() {

@@ -14,4 +14,7 @@
         completions."
     </string>
     <string name="loginTitle">Login:</string>
+    <string name="preference_file_key">copyeverything.tk.copyeverything.Pref_File_Key</string>
+    <string name="saved_email">copyeverything.tk.copyeverything.SAVED_EMAIL</string>
+    <string name="saved_pass">copyeverything.tk.copyeverything.SAVED_PASS</string>
 </resources>
