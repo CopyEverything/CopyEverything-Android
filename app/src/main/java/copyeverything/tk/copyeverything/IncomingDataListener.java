@@ -23,11 +23,15 @@ public class IncomingDataListener extends Service {
 
     public static String lastReceivedString = "";
     private Socket mSocket;
+    private ClipboardManager clipboard;
 
     @Override
     public void onCreate() {
         SocketDataBase database = (SocketDataBase) getApplication();
         mSocket = database.getSocket();
+
+        clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
         mSocket.on("new server copy", getPaste);
     }
 
@@ -41,6 +45,7 @@ public class IncomingDataListener extends Service {
     public void onDestroy(){
 
     }
+
     private Emitter.Listener getPaste = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
@@ -49,7 +54,6 @@ public class IncomingDataListener extends Service {
                 return;
             }
             Log.w("Got Data", a);
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("simple text", a);
             clipboard.setPrimaryClip(clip);
             lastReceivedString = a;

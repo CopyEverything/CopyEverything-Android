@@ -103,8 +103,8 @@ public class AuthenticationActivity extends AppCompatActivity {
 
                 if(response.getBoolean(0)) {
 
-                    Context ctx = getApplicationContext();
                     isAuth = true;
+                    Context ctx = getApplicationContext();
                     saveCredentials();
 
                     Intent IncomingDataListener = new Intent(ctx, IncomingDataListener.class);
