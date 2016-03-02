@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -51,6 +52,15 @@ public class AuthenticationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+
+        //Remove support action bar
+        Handler h = new Handler();
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+                getSupportActionBar().hide();
+            }
+        });
 
         Bundle data = getIntent().getExtras();
 
