@@ -28,6 +28,7 @@ import java.util.TimeZone;
 
 public class CopyListener extends Service {
 
+    public static String lastSentString = "";
     private Socket mSocket;
 
     public void startCopyListener() {
@@ -44,17 +45,18 @@ public class CopyListener extends Service {
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if(cd != null){
-                if(IncomingDataListener.lastReceivedString.equalsIgnoreCase(cd.getItemAt(0).getText().toString())){
+                String clip = cd.getItemAt(0).getText().toString();
+                if(lastSentString.equalsIgnoreCase(clip)){
                     return;
                 }
                 if(mSocket.connected()){
                     Log.w("Test", cd.getItemAt(0).toString());
-                    mSocket.emit("new client copy", cd.getItemAt(0).getText().toString());
+                    mSocket.emit("new client copy", clip);
+                    lastSentString = clip;
                 }
             }
         }
     }
-
 
     @Override
     public void onCreate(){

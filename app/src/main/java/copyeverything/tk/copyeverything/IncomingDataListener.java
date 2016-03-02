@@ -50,9 +50,10 @@ public class IncomingDataListener extends Service {
         @Override
         public void call(Object... args) {
             String a = (String)args[0];
-            if(lastReceivedString.equalsIgnoreCase(a)){
+
+            if(lastReceivedString.equalsIgnoreCase(a))
                 return;
-            }
+
             Log.w("Got Data", a);
             ClipData clip = ClipData.newPlainText("simple text", a);
             clipboard.setPrimaryClip(clip);
