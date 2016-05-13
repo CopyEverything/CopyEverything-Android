@@ -7,15 +7,15 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name=".SocketDataBase"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".SocketDataBase"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".Login"
             android:label="@string/app_name" >
@@ -25,23 +25,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuthenticationActivity" android:label="@string/app_name" ></activity>
-        <activity android:name=".MainActivity" android:label="@string/app_name" ></activity>
+        <activity
+            android:name=".AuthenticationActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" />
 
-        <service android:name=".IncomingDataListener" android:label="Incoming Listener"
-            android:exported="false">
+        <service
+            android:name=".IncomingDataListener"
+            android:exported="false"
+            android:label="Incoming Listener" >
             <intent-filter>
-                <action android:name="copyeverything.tk.copyeverything"/>
+                <action android:name="copyeverything.tk.copyeverything" />
             </intent-filter>
         </service>
-        <service android:name=".CopyListener" android:label="Copy Listener"
-            android:exported="false">
+        <service
+            android:name=".CopyListener"
+            android:exported="false"
+            android:label="Copy Listener" >
             <intent-filter>
-                <action android:name="copyeverything.tk.copyeverything"/>
+                <action android:name="copyeverything.tk.copyeverything" />
             </intent-filter>
         </service>
-        <receiver android:name=".StartListeners"
-            android:label="StartListeners">
+
+        <receiver
+            android:name=".StartListeners"
+            android:label="StartListeners" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
