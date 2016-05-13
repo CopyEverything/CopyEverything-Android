@@ -1,21 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="You are now connected\n to the cloud!"
-            android:id="@+id/txtCopies"
-            android:textSize="20dp"
-            android:textColor="#FFFFFF"
-            android:layout_centerInParent="true"
-            android:textAlignment="center"
-            android:singleLine="false" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="You are now connected\n to the cloud!"
+        android:id="@+id/txtConnected"
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:singleLine="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Latest copies:"
+        android:id="@+id/txtHistoryLabel"
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:singleLine="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtConnected"
+        android:layout_marginTop="40dp" />
 
+    <ListView
+        android:id="@+id/clipHistory"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="160dp">
+
+    </ListView>
 
 </RelativeLayout>
