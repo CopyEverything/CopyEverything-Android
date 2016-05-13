@@ -51,12 +51,8 @@ public class MainActivity extends Activity {
         Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
         mTextView.setTypeface(titleFont);
 
-        //Debug
-        Clip testClip = new Clip<>("Yeah!!!");
-
         //Setup Clipboard History
         clipboardHistory = new ArrayList<>();
-        clipboardHistory.add(testClip);
 
         //Set Array adapter for history list
         ListView history = (ListView) findViewById(R.id.clipHistory);
