@@ -20,8 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gc.materialdesign.views.CustomView;
-import com.gc.materialdesign.views.ScrollView;
 
 import java.util.ArrayList;
 

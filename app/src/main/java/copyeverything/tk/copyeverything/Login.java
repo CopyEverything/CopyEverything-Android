@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    public static User user = new User();
+    //public static User user = new User();
     // UI references.
     private TextView mTitleView;
     private AutoCompleteTextView mEmailView;

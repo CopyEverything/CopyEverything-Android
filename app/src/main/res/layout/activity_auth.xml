@@ -22,13 +22,7 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF" />
 
-        <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
-            android:id="@+id/progressCircle"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="#99ffe2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp" />
+
     </LinearLayout>
 
 </RelativeLayout>

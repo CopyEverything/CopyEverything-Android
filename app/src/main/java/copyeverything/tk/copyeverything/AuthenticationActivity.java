@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Ack;
 import com.github.nkzawa.socketio.client.Socket;
@@ -32,7 +31,7 @@ import java.util.TimerTask;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
-    public User user = new User();
+    //public User user = new User();
     //RetrieveUserToken token;
     Socket mSocket;
     Boolean isAuth = false;
@@ -176,12 +175,12 @@ public class AuthenticationActivity extends AppCompatActivity {
             return;
         }
 
-        user.setInfo(token, uid);
+        //user.setInfo(token, uid);
         SharedPreferences settings = getSharedPreferences("CopyEverythingTemp", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(uid,token).apply();
-        Firebase.setAndroidContext(this);
-        FireBaseData.authUser();
+        //Firebase.setAndroidContext(this);
+        //FireBaseData.authUser();
         Intent test = new Intent(this, IncomingDataListener.class);
         this.startService(test);
         Intent nextTest = new Intent(this, CopyListener.class);
