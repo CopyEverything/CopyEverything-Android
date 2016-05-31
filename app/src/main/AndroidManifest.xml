@@ -52,6 +52,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <!-- Twitter -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="54aba1cbe05a5f5c3e83ffe80ca158d244a5ee69" />
+        <!-- Facebook -->
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 
 </manifest>

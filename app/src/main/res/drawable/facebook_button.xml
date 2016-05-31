@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  res/drawable/facebook_button.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <inset android:drawable="@drawable/facebook_logo_square"/>
+    </item>
+    <item android:left="48dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/facebook_blue" />
+        </shape>
+    </item>
+</layer-list>

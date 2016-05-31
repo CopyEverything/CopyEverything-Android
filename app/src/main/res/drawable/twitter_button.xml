@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  res/drawable/twitter_button.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <inset android:drawable="@drawable/twitter_logo_square"/>
+    </item>
+    <item android:left="48dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#2A89FE" />
+        </shape>
+    </item>
+</layer-list>

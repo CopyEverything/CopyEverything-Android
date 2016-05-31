@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  res/drawable/email_button.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <inset android:drawable="@drawable/email_logo_square"/>
+    </item>
+    <item android:left="48dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/emailMain" />
+        </shape>
+    </item>
+</layer-list>

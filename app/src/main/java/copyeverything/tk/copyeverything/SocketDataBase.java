@@ -24,7 +24,8 @@ public class SocketDataBase extends Application {
             options.multiplex = false;
             options.secure = true;
 
-            mSocket = IO.socket("https://copyeverything.tk", options);
+            //TODO: Convert to copyeverythingapp.com website (when up)
+            mSocket = IO.socket("http://copyeverything.tk", options);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

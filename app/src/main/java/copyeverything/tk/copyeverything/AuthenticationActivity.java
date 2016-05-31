@@ -1,12 +1,13 @@
 package copyeverything.tk.copyeverything;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
+//import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ import java.util.TimerTask;
  * Created by Nathan on 2016-01-30.
  */
 
-public class AuthenticationActivity extends AppCompatActivity {
+public class AuthenticationActivity extends Activity {
 
     //public User user = new User();
     //RetrieveUserToken token;
@@ -51,15 +52,6 @@ public class AuthenticationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-
-        //Remove support action bar
-        Handler h = new Handler();
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                getSupportActionBar().hide();
-            }
-        });
 
         Bundle data = getIntent().getExtras();
 
