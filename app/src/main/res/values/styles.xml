@@ -17,6 +17,7 @@
 
     //Twitter styles
     <color name="twitter_blue">#55acee</color>
+    <color name="twitter_blue_dark">#2A89FE</color>
 
     //Facebook styles
     <color name="facebook_blue">#3b5998</color>

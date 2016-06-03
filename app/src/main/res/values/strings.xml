@@ -22,4 +22,7 @@
     <string name="facebook_app_id">840742472736370</string>
 
     <string name="email_login">Log in with Email</string>
+    <string name="company_name">Copy Everything</string>
+    <string name="test_email">test@test.com</string>
+    <string name="test_password">testtest</string>
 </resources>
