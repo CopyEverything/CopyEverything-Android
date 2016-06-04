@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="copyeverything.tk.copyeverything" >
+    package="copyeverything.tk.copyeverything">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,12 +12,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Login"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,7 +32,7 @@
         <service
             android:name=".IncomingDataListener"
             android:exported="false"
-            android:label="Incoming Listener" >
+            android:label="Incoming Listener">
             <intent-filter>
                 <action android:name="copyeverything.tk.copyeverything" />
             </intent-filter>
@@ -39,7 +40,7 @@
         <service
             android:name=".CopyListener"
             android:exported="false"
-            android:label="Copy Listener" >
+            android:label="Copy Listener">
             <intent-filter>
                 <action android:name="copyeverything.tk.copyeverything" />
             </intent-filter>
@@ -47,7 +48,7 @@
 
         <receiver
             android:name=".StartListeners"
-            android:label="StartListeners" >
+            android:label="StartListeners">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -57,7 +58,13 @@
             android:name="io.fabric.ApiKey"
             android:value="54aba1cbe05a5f5c3e83ffe80ca158d244a5ee69" />
         <!-- Facebook -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>
