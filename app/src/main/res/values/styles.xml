@@ -15,6 +15,11 @@
     <color name="accent">#aa1e7878</color>
     <color name="statusBarPrimary">#99000000</color>
 
+    //Bolden Theme Styles
+    <color name="bolden_red">#F41D07</color>
+    <color name="bolden_blue">#1BD3E3</color>
+    <color name="material_gray">#757575</color>
+
     //Twitter styles
     <color name="twitter_blue">#55acee</color>
     <color name="twitter_blue_dark">#2A89FE</color>

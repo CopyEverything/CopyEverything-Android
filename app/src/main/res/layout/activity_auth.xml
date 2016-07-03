@@ -3,7 +3,7 @@
     android:windowActionBar="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background">
+    android:background="@drawable/bolden_diagonal_gradient">
 
     <LinearLayout
         android:orientation="vertical"

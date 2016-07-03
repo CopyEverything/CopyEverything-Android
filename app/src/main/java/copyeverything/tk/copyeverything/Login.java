@@ -21,12 +21,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+//import com.facebook.CallbackManager;
+//import com.facebook.FacebookCallback;
+//import com.facebook.FacebookException;
+//import com.facebook.FacebookSdk;
+//import com.facebook.login.LoginManager;
+//import com.facebook.login.LoginResult;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -86,7 +86,7 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
                     }
                 });*/
 
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_bolden);
 
         /*mTwitterLoginButton = (Button) findViewById(R.id.twitter_login_button);
         mTwitterLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -134,9 +134,9 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
         }
 
         // Set up the login form.
-        mTitleView = (TextView) findViewById(R.id.txtTitle);
-        Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
-        mTitleView.setTypeface(titleFont);
+        //mTitleView = (TextView) findViewById(R.id.txtTitle);
+        //Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
+        //mTitleView.setTypeface(titleFont);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
@@ -152,7 +152,7 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
