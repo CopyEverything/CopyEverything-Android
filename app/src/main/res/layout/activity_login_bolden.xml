@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/topLayout"
     android:gravity="center"
-    android:background="@drawable/bolden_diagonal_gradient">
+    android:background="@drawable/skyline_background">
 
     <LinearLayout
         android:orientation="vertical"
@@ -13,17 +13,34 @@
         android:padding="20dp"
         android:background="#FFFFFFFF">
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Copy Everything"
-            android:id="@+id/title"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:textSize="32dp"/>
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="COPY"
+                android:id="@+id/titleCopy"
+                android:textColor="@color/bolden_blue"
+                android:textStyle="bold"
+                android:textSize="32dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="EVERYTHING"
+                android:id="@+id/titleEverything"
+                android:textColor="@color/bolden_red"
+                android:textStyle="bold"
+                android:textSize="32dp"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -46,9 +63,10 @@
                 android:inputType="textEmailAddress"
                 android:paddingBottom="6dp"
                 android:id="@+id/email"
-                android:textColor="@color/material_gray"
+                android:textColor="#FF000000"
                 android:textSize="20dp"
                 android:hint="Email"
+                android:textColorHint="@color/material_gray"
                 android:linksClickable="false" />
 
         </LinearLayout>
@@ -81,15 +99,35 @@
 
         </LinearLayout>
 
-        <Button
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_box_blue"
-            android:padding="8dp"
-            android:text="Login"
-            android:id="@+id/login_button"
-            android:layout_gravity="center_horizontal"
-            android:textColor="#FFFFFF"/>
+            android:clipToPadding="false"
+            android:padding="6px"
+            android:gravity="center_horizontal"
+            android:id="@+id/login_button_root">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/login_button_back"
+                android:background="@drawable/bolden_button_red_back"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/bolden_button_red"
+                android:translationX="-6px"
+                android:translationY="-6px"
+                android:padding="8dp"
+                android:text="Login"
+                android:id="@+id/login_button"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/bolden_red"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
 
 
     </LinearLayout>

@@ -3,7 +3,7 @@
     android:windowActionBar="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bolden_diagonal_gradient">
+    android:background="@drawable/skyline_background">
 
     <LinearLayout
         android:orientation="vertical"
@@ -20,7 +20,7 @@
             android:id="@+id/txtAuth"
             android:textStyle="bold|italic"
             android:textAlignment="center"
-            android:textColor="#FFFFFF" />
+            android:textColor="#000000" />
 
 
     </LinearLayout>

@@ -1,5 +1,6 @@
 package copyeverything.tk.copyeverything;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,14 +11,21 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +64,8 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
     private TextView mTitleView;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+
+    private Button mLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +144,13 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
         }
 
         // Set up the login form.
+        TextView txtCopyView = (TextView) findViewById(R.id.titleCopy);
+        TextView txtEverythingView = (TextView) findViewById(R.id.titleEverything);
+
+        Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/GT Pressura Bold.ttf");
+        txtCopyView.setTypeface(titleFont);
+        txtEverythingView.setTypeface(titleFont);
+
         //mTitleView = (TextView) findViewById(R.id.txtTitle);
         //Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
         //mTitleView.setTypeface(titleFont);
@@ -152,10 +169,22 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        mLoginButton = (Button) findViewById(R.id.login_button);
+
+        mLoginButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
+                Animation clickAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bolden_button_click);
+                view.startAnimation(clickAnimation);
+
+                Handler h = new Handler();
+                Runnable r = new Runnable() {
+                    public void run() {
+                        view.clearAnimation();
+                    }
+                };
+                h.postDelayed(r, 100);
+
                 attemptLogin();
             }
         });
