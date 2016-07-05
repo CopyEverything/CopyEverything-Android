@@ -59,9 +59,8 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    //public static User user = new User();
+
     // UI references.
-    private TextView mTitleView;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
 
@@ -151,13 +150,13 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
         txtCopyView.setTypeface(titleFont);
         txtEverythingView.setTypeface(titleFont);
 
-        //mTitleView = (TextView) findViewById(R.id.txtTitle);
-        //Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
-        //mTitleView.setTypeface(titleFont);
 
+        Typeface maisonNeueLight = Typeface.createFromAsset(getAssets(), "fonts/MaisonNeue-Light.ttf");
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        mEmailView.setTypeface(maisonNeueLight);
+        mPasswordView.setTypeface(maisonNeueLight);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -170,7 +169,6 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
         });
 
         mLoginButton = (Button) findViewById(R.id.login_button);
-
         mLoginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -181,11 +179,10 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
                 Runnable r = new Runnable() {
                     public void run() {
                         view.clearAnimation();
+                        attemptLogin();
                     }
                 };
-                h.postDelayed(r, 100);
-
-                attemptLogin();
+                h.postDelayed(r, 150);
             }
         });
 
@@ -199,6 +196,7 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+
     private void attemptLogin() {
         // Reset errors.
         mEmailView.setError(null);
@@ -214,14 +212,21 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             //If empty go to register page
-            Uri registerPageUri = Uri.parse("https://copyeverything.tk");
-            Intent redirectIntent = new Intent(Intent.ACTION_VIEW, registerPageUri);
-            startActivity(redirectIntent);
+            //Uri registerPageUri = Uri.parse("https://copyeverything.tk");
+            //Intent redirectIntent = new Intent(Intent.ACTION_VIEW, registerPageUri);
+            //startActivity(redirectIntent);
             focusView = mEmailView;
+            mEmailView.setError(getString(R.string.error_field_required));
             cancel = true;
+
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
+            cancel = true;
+
+        } else if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
         }
 
@@ -241,7 +246,6 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-
         return email.contains("@");
     }
 

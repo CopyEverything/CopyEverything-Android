@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
@@ -17,6 +19,38 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class AuthenticationActivity extends Activity {
+
+    TextView mAuthTextView;
+    Handler mHandle = new Handler();
+    Runnable animateAuthText = new Runnable() {
+        @Override
+        public void run() {
+
+            if(mAuthTextView == null)
+                mAuthTextView = (TextView) findViewById(R.id.txtAuth);
+
+            String txt = mAuthTextView.getText().toString();
+
+            int dotCount = 0;
+            for( int i=0; i<txt.length(); i++ ) {
+                if( txt.charAt(i) == '.' ) {
+                    dotCount++;
+                }
+            }
+
+            if (dotCount < 3) {
+                txt = txt.trim() + ".";
+                while (txt.length() < 17) {txt += ' ';} //Adds whitespace to always produce 17 character string
+            }
+            else
+                txt = "Authenticating   ";
+
+            mAuthTextView.setText(txt);
+
+            if (!isAuth)
+                mHandle.postDelayed(animateAuthText, 500);
+        }
+    };
 
     Socket mSocket;
     Boolean isAuth = false;
@@ -46,6 +80,8 @@ public class AuthenticationActivity extends Activity {
 
         Timer timer = new Timer();
         timer.schedule(hTimer, 20000);
+
+        mHandle.postDelayed(animateAuthText, 500);
     }
 
     public void attemptLogin(String username, String password) {
