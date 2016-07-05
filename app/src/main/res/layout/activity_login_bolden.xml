@@ -6,12 +6,14 @@
     android:gravity="center"
     android:background="@drawable/skyline_background">
 
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:background="#FFFFFFFF">
+        android:background="#FFFFFFFF"
+        android:id="@+id/login_form">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -92,9 +94,9 @@
                 android:paddingBottom="6dp"
                 android:inputType="textPassword"
                 android:id="@+id/password"
-                android:textColor="@color/material_gray"
                 android:textSize="20dp"
                 android:hint="Password"
+                android:textColorHint="@color/material_gray"
                 android:linksClickable="false" />
 
         </LinearLayout>
@@ -129,6 +131,17 @@
 
         </RelativeLayout>
 
-
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="@string/txt_auth_default"
+        android:id="@+id/txtAuthenticating"
+        android:textStyle="bold|italic"
+        android:textColor="#000000" />
+
 </RelativeLayout>

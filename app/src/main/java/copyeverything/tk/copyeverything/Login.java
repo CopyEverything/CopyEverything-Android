@@ -2,7 +2,9 @@ package copyeverything.tk.copyeverything;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -21,10 +23,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,10 +65,46 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
      */
 
     // UI references.
+    private LinearLayout mLoginForm;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-
     private Button mLoginButton;
+
+    Boolean mIsAuth = false;
+    TextView mAuthTextView;
+    Handler mHandle = new Handler();
+    Runnable animateAuthText = new Runnable() {
+        @Override
+        public void run() {
+
+            if(mAuthTextView == null)
+                mAuthTextView = (TextView) findViewById(R.id.txtAuthenticating);
+
+            if(mAuthTextView.getVisibility() != View.VISIBLE)
+                return;
+
+            String txt = mAuthTextView.getText().toString();
+
+            int dotCount = 0;
+            for( int i=0; i<txt.length(); i++ ) {
+                if( txt.charAt(i) == '.' ) {
+                    dotCount++;
+                }
+            }
+
+            if (dotCount < 3) {
+                txt = txt.trim() + ".";
+                while (txt.length() < 17) {txt += ' ';} //Adds whitespace to always produce 17 character string
+            }
+            else
+                txt = "Authenticating   ";
+
+            mAuthTextView.setText(txt);
+
+            if (!mIsAuth)
+                mHandle.postDelayed(animateAuthText, 500);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,22 +174,15 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
             }
         });*/
 
-        //Get Error Messages if coming back from authentication screen
-        Bundle data = getIntent().getExtras();
-
-        if(data != null) {
-            String errorMessage = data.getString("error");
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-        }
-
         // Set up the login form.
+        mLoginForm = (LinearLayout) findViewById(R.id.login_form);
+        mAuthTextView = (TextView) findViewById(R.id.txtAuthenticating);
         TextView txtCopyView = (TextView) findViewById(R.id.titleCopy);
         TextView txtEverythingView = (TextView) findViewById(R.id.titleEverything);
 
         Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/GT Pressura Bold.ttf");
         txtCopyView.setTypeface(titleFont);
         txtEverythingView.setTypeface(titleFont);
-
 
         Typeface maisonNeueLight = Typeface.createFromAsset(getAssets(), "fonts/MaisonNeue-Light.ttf");
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -179,10 +212,15 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
                 Runnable r = new Runnable() {
                     public void run() {
                         view.clearAnimation();
-                        attemptLogin();
                     }
                 };
                 h.postDelayed(r, 150);
+
+                //Hide Keyboard
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                attemptLogin();
             }
         });
 
@@ -203,8 +241,8 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -235,12 +273,38 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            Intent intent = new Intent(this, AuthenticationActivity.class);
-            intent.putExtra("email", email);
-            intent.putExtra("password", password);
-            startActivity(intent);
+            Authenticator mAuthManager = new Authenticator(this, new Authenticator.LoginCallback() {
+                @Override
+                public void success() {
+                    mIsAuth = true;
+                    saveCredentials(email, password);
+                    Context ctx = getApplicationContext();
+
+                    Intent IncomingDataListener = new Intent(ctx, IncomingDataListener.class);
+                    ctx.startService(IncomingDataListener);
+                    Intent CopyListener = new Intent(ctx, CopyListener.class);
+                    ctx.startService(CopyListener);
+
+                    //Go to MainActivity
+                    Intent intent = new Intent(ctx, MainActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void failure(String errorMessage) {
+                    Toast.makeText(Login.this, errorMessage, Toast.LENGTH_LONG).show();
+                    mLoginForm.setVisibility(View.VISIBLE);
+                    mAuthTextView.setText(R.string.txt_auth_default);
+                    mAuthTextView.setVisibility(View.GONE);
+                }
+            });
+            mAuthManager.attemptLogin(email, password);
+
+            mLoginForm.setVisibility(View.GONE);
+            mAuthTextView.setVisibility(View.VISIBLE);
+
+            mHandle.postDelayed(animateAuthText, 500);
         }
     }
 
@@ -273,5 +337,15 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         mTwitterAuthClient.onActivityResult(requestCode, responseCode, intent);
     }*/
+
+    private void saveCredentials(String email, String password) {
+        //Saves email and password in plain text
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //TODO: Save AuthTokens vs plaintext info
+        editor.putString(getString(R.string.saved_email), email);
+        editor.putString(getString(R.string.saved_pass), password);
+        editor.apply();
+    }
 }
 
