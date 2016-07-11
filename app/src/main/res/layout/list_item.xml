@@ -8,9 +8,9 @@
         android:id="@+id/clipInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="20dp"
+        android:textSize="12dp"
         android:textStyle="bold"
+        android:textColor="@color/bolden_red"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
@@ -20,8 +20,8 @@
         android:id="@+id/clipContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         android:textSize="20dp"
+        android:textColor="@color/bolden_blue"
         android:layout_marginStart="20dp"/>
 
 </LinearLayout>

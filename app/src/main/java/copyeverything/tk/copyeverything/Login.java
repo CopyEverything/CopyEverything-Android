@@ -71,6 +71,7 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
     private Button mLoginButton;
 
     Boolean mIsAuth = false;
+    Boolean mIsLogging = false;
     TextView mAuthTextView;
     Handler mHandle = new Handler();
     Runnable animateAuthText = new Runnable() {
@@ -101,7 +102,7 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
 
             mAuthTextView.setText(txt);
 
-            if (!mIsAuth)
+            if (!mIsAuth && mIsLogging)
                 mHandle.postDelayed(animateAuthText, 500);
         }
     };
@@ -274,11 +275,13 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
             focusView.requestFocus();
         } else {
             // perform the user login attempt.
+            mIsLogging = true;
             Authenticator mAuthManager = new Authenticator(this, new Authenticator.LoginCallback() {
                 @Override
                 public void success() {
                     mIsAuth = true;
-                    saveCredentials(email, password);
+                    mIsLogging = false;
+                    //saveCredentials(email, password);
                     Context ctx = getApplicationContext();
 
                     Intent IncomingDataListener = new Intent(ctx, IncomingDataListener.class);
@@ -292,11 +295,19 @@ public class Login extends Activity implements LoaderCallbacks<Cursor> {
                 }
 
                 @Override
-                public void failure(String errorMessage) {
-                    Toast.makeText(Login.this, errorMessage, Toast.LENGTH_LONG).show();
-                    mLoginForm.setVisibility(View.VISIBLE);
-                    mAuthTextView.setText(R.string.txt_auth_default);
-                    mAuthTextView.setVisibility(View.GONE);
+                public void failure(final String errorMessage) {
+                    mIsLogging = false;
+
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAuthTextView.setText(R.string.txt_auth_default);
+                            mAuthTextView.setVisibility(View.GONE);
+                            mLoginForm.setVisibility(View.VISIBLE);
+                            Toast.makeText(Login.this, errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    }, 500);
                 }
             });
             mAuthManager.attemptLogin(email, password);

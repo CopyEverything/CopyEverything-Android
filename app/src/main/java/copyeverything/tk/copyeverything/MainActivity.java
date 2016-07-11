@@ -9,7 +9,10 @@ import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -18,79 +21,44 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import java.util.ArrayList;
 
 /**
  * Created by Nathan on 2016-01-30.
  */
-public class MainActivity extends Activity {
-
-    private Context ctx;
-    private TextView mTextView;
-
-    private ArrayList<Clip> clipboardHistory;
-    private ClipHistoryAdapter adapter;
-
-    //Setup clip receiver for updates
-    private BroadcastReceiver clipReceiver;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ctx = getApplicationContext();
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Home"));
+        tabLayout.addTab(tabLayout.newTab().setText("History"));
+        //tabLayout.addTab(tabLayout.newTab().setText("Settings"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        // Modify connected text font
-        mTextView = (TextView) findViewById(R.id.txtConnected);
-        Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Bold.otf");
-        mTextView.setTypeface(titleFont);
-
-        //Setup Clipboard History
-        clipboardHistory = new ArrayList<>();
-
-        //Set Array adapter for history list
-        ListView history = (ListView) findViewById(R.id.clipHistory);
-        adapter = new ClipHistoryAdapter(ctx, R.id.clipHistory, clipboardHistory);
-        history.setAdapter(adapter);
-
-        //Setup clip receiver
-        clipReceiver = new BroadcastReceiver() {
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final PagerAdapter pageAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pageAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-
-                Bundle data = intent.getExtras();
-                String clipID = data.getString("id");
-                String content = data.getString("content");
-                long timestamp = data.getLong("ts");
-                String device = data.getString("device");
-
-                Clip clip = new Clip<>(clipID, content, timestamp, device);
-                clipboardHistory.add(clip);
-
-                adapter.notifyDataSetChanged();
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
-        };
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver(clipReceiver,
-                new IntentFilter(CopyListener.CLIP_RESULT)
-        );
-    }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-    @Override
-    protected void onStop() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(clipReceiver);
-        super.onStop();
-    }
+            }
 
-    public void addClipToHistory(Clip c) {
-        clipboardHistory.add(c);
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

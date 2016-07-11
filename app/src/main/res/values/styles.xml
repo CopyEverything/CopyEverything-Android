@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Translucent.NoTitleBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
         <!-- Main theme colors -->
         <!--   your app branding color for the app bar -->
         <!--<item name="android:colorPrimary">@color/primary</item>-->
